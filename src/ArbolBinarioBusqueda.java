@@ -129,90 +129,51 @@ public class ArbolBinarioBusqueda {
 
     }
 
-    public Nodo Eliminar(int valor){
-        Nodo R = buscar(raiz, valor, nivel);
-        if(R == null){
-            System.out.println("El valor no se encuentra en el ABB.");
-            return null;
-        } else {
-            Nodo T;
-            if(R.dato == valor){
-                T = R;
-            } else if (valor < R.dato) {
-                T = R.izq;
-            } else {
-                T = R.der;
-            }
-            if(T == R && T.izq == null && T.der == null){
-                R = null;
-                return T;
-            } else if(T == R && (T.izq == null || T.der == null)){
-                if(T.izq != null){
-                    R = T.izq;
-                    T.izq = null;
-                } else {
-                    R = T.der;
-                    T.der = null;
-                }
-                return T;
-            } else if(T.izq == null && T.der == null){
-                if(R.izq == T){
-                    R.izq = null;
-                } else {
-                    R.der = null;
-                }
-                return T;
-            } else if(T.izq == null){
-                if(R.izq == T){
-                    R.izq = T.der;
-                } else {
-                    R.der = T.der;
-                }
-                T.der = null;
-                return T;
-            } else if(T.der == null){
-                if(R.izq == T){
-                    R.izq = T.izq;
-                } else {
-                    R.der = T.izq;
-                }
-                T.izq = null;
-                return T;
-            } else if(T.izq != null && T.der != null){ // Esta es la validacion por si T tiene dos hijos
-                Nodo Q = T.izq;
-                Nodo A = T;
-                while (Q.der != null) {
-                    A = Q;
-                    Q = Q.der;
-                }
-                int temp = Q.dato;
-                Q.dato = T.dato;
-                T.dato = temp;
-                if (A == T) {
-                    A.izq = Q.izq;
-                } else {
-                    A.der = Q.izq;
-                }
-                Q.izq = null;
-                return Q;
-            }
+    public Nodo eliminar(Nodo nodo, int valor) {
+        if (nodo == null) {
+            return null; 
         }
-        return null;
+    
+        if (valor < nodo.dato) {
+            nodo.izq = eliminar(nodo.izq, valor);  
+        } else if (valor > nodo.dato) {
+            nodo.der = eliminar(nodo.der, valor); 
+        } else {
+            if (nodo.izq == null) {
+                return nodo.der;  
+            } else if (nodo.der == null) {
+                return nodo.izq; 
+            }
+    
+            nodo.dato = valorMinimo(nodo.der);
+    
+            nodo.der = eliminar(nodo.der, nodo.dato);
+        }
+        return nodo;
     }
-
-
+    
+    private int valorMinimo(Nodo nodo) {
+        int valorMin = nodo.dato;
+        while (nodo.izq != null) {
+            valorMin = nodo.izq.dato;
+            nodo = nodo.izq;
+        }
+        return valorMin;
+    }
+    
 
     public void Modificar(int valor){
-        Nodo R = buscar(raiz, valor, nivel);
-        if (R == null){
+        if (buscar(raiz, valor, 1) == null) {
             System.out.println("El valor no se encuentra en el ABB.");
-        }else {
-            raiz = Eliminar(valor);
+        } else {
+            raiz = eliminar(raiz, valor);
             System.out.println("Ingresa el nuevo valor: ");
             int nuevoValor = sc.nextInt();
+            sc.nextLine();  
             raiz = insertar(raiz, nuevoValor);
         }
     }
+    
 
 
 

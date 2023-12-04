@@ -50,13 +50,22 @@ public class Main {
                     System.out.println("Presiona 'Enter' para continuar...");
                     scanner.nextLine();
                     break;
-                case "5":
+                    case "5":
                     System.out.println("Ingresa el valor que deseas eliminar del ABB: ");
                     valor = scanner.nextInt();
-                    ABB.raiz = ABB.Eliminar(valor);
+                    scanner.nextLine();
+                
+                    if (ABB.buscar(ABB.raiz, valor, 1) == null) {
+                        System.out.println("El valor no se encuentra en el ABB.");
+                    } else {
+                        ABB.raiz = ABB.eliminar(ABB.raiz, valor);
+                        System.out.println("Valor eliminado exitosamente.");
+                    }
+                
                     System.out.println("Presiona 'Enter' para continuar...");
                     scanner.nextLine();
                     break;
+                
                 case "6":
                     System.out.println("Ingresa el valor que deseas modificar del ABB: ");
                     valor = scanner.nextInt();
